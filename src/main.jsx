@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   CheckCircle2,
@@ -24,6 +24,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [tag, setTag] = useState("全部");
   const [copied, setCopied] = useState(false);
+  const studyPanelRef = useRef(null);
 
   const tags = useMemo(() => {
     const all = hot100Problems.flatMap((problem) => problem.tags);
@@ -63,6 +64,15 @@ function App() {
     await navigator.clipboard.writeText(activeProblem.solution.code);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1300);
+  };
+
+  const handleSelectProblem = (problemId) => {
+    setActiveId(problemId);
+    if (window.matchMedia("(max-width: 940px)").matches) {
+      window.requestAnimationFrame(() => {
+        studyPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
   };
 
   return (
@@ -108,7 +118,7 @@ function App() {
                 <button
                   className={`problem-item ${problem.id === activeProblem.id ? "active" : ""}`}
                   key={problem.id}
-                  onClick={() => setActiveId(problem.id)}
+                  onClick={() => handleSelectProblem(problem.id)}
                 >
                   <span className="order">{String(problem.id).padStart(2, "0")}</span>
                   <span className="item-copy">
@@ -128,7 +138,7 @@ function App() {
         </nav>
       </aside>
 
-      <section className="study-panel">
+      <section className="study-panel" ref={studyPanelRef}>
         <header className="problem-header">
           <div>
             <p className="sequence">Hot 100 第 {activeProblem.id} 题</p>

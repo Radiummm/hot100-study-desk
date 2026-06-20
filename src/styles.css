@@ -506,8 +506,12 @@ button {
   }
 
   .problem-list {
-    max-height: 430px;
+    max-height: 310px;
     overflow: auto;
+  }
+
+  .study-panel {
+    scroll-margin-top: 12px;
   }
 
   .overview-grid,
@@ -550,5 +554,9 @@ button {
 
   .problem-item .difficulty {
     width: fit-content;
+  }
+
+  .problem-list {
+    max-height: 280px;
   }
 }
