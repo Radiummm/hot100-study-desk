@@ -130,8 +130,42 @@ button {
 .problem-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 18px;
   margin-top: 18px;
+}
+
+.problem-group {
+  display: grid;
+  gap: 8px;
+}
+
+.group-heading {
+  position: sticky;
+  top: -22px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+  border-top: 1px solid #17211b;
+  border-bottom: 1px solid var(--line);
+  padding: 8px 2px 7px;
+  background: rgba(251, 252, 247, 0.94);
+  backdrop-filter: blur(12px);
+  color: #17211b;
+}
+
+.group-heading span {
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.group-heading small {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
 }
 
 .problem-item {
@@ -174,7 +208,8 @@ button {
 }
 
 .item-copy strong,
-.item-copy small {
+.item-copy small,
+.item-copy em {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -189,6 +224,18 @@ button {
   margin-top: 4px;
   color: var(--muted);
   font-size: 0.76rem;
+}
+
+.item-copy em {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 7px;
+  border-left: 3px solid #f5d36e;
+  padding-left: 7px;
+  color: #506358;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
 }
 
 .difficulty {

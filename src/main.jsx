@@ -43,6 +43,19 @@ function App() {
     });
   }, [query, tag]);
 
+  const groupedProblems = useMemo(() => {
+    const groups = [];
+    for (const problem of filteredProblems) {
+      const last = groups[groups.length - 1];
+      if (!last || last.name !== problem.group) {
+        groups.push({ name: problem.group, problems: [problem] });
+      } else {
+        last.problems.push(problem);
+      }
+    }
+    return groups;
+  }, [filteredProblems]);
+
   const activeProblem =
     hot100Problems.find((problem) => problem.id === activeId) || hot100Problems[0];
 
@@ -83,24 +96,34 @@ function App() {
           </select>
         </div>
 
-        <nav className="problem-list">
-          {filteredProblems.map((problem) => (
-            <button
-              className={`problem-item ${problem.id === activeProblem.id ? "active" : ""}`}
-              key={problem.id}
-              onClick={() => setActiveId(problem.id)}
-            >
-              <span className="order">{String(problem.id).padStart(2, "0")}</span>
-              <span className="item-copy">
-                <strong>{problem.cnTitle}</strong>
-                <small>
-                  #{problem.leetcodeId} {problem.title}
-                </small>
-              </span>
-              <span className={`difficulty ${difficultyClass[problem.difficulty]}`}>
-                {problem.difficulty}
-              </span>
-            </button>
+        <nav className="problem-list" aria-label="按分类分组的 Hot 100 题目">
+          {groupedProblems.map((group) => (
+            <section className="problem-group" key={group.name}>
+              <div className="group-heading">
+                <span>{group.name}</span>
+                <small>{group.problems.length} 题</small>
+              </div>
+
+              {group.problems.map((problem) => (
+                <button
+                  className={`problem-item ${problem.id === activeProblem.id ? "active" : ""}`}
+                  key={problem.id}
+                  onClick={() => setActiveId(problem.id)}
+                >
+                  <span className="order">{String(problem.id).padStart(2, "0")}</span>
+                  <span className="item-copy">
+                    <strong>{problem.cnTitle}</strong>
+                    <small>
+                      #{problem.leetcodeId} {problem.title}
+                    </small>
+                    <em>{problem.group}</em>
+                  </span>
+                  <span className={`difficulty ${difficultyClass[problem.difficulty]}`}>
+                    {problem.difficulty}
+                  </span>
+                </button>
+              ))}
+            </section>
           ))}
         </nav>
       </aside>
